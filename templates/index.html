@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Fishing Team</title>
+</head>
+<body>
+    <div class="center">
+        <h1>Вас приветствует Fishing Team!</h1>
+        <form action="{{ url_for('result') }}" method="post">
+            <input type="text" name="user_query" required>
+            <button type="submit">Продолжить</button>
+        </form>
+    </div>
+</body>
+</html>

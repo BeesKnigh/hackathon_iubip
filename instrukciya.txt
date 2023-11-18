@@ -1,0 +1,9 @@
+чтобы все запустилось скачайте:
+pip install Flask
+pip install pandas
+pip install scikit-learn
+pip install tensorflow
+pip install keras
+
+чтобы все запустилось(опять же) пишите: python C:\code_c\Final_project\app.py --no-reload
+p.s не забудьте про venv
