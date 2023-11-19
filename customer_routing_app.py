@@ -6,6 +6,7 @@ from keras.layers import (Embedding, LSTM, Dense)
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from keras.callbacks import ModelCheckpoint
+from keras.callbacks import ModelCheckpoint, TensorBoard
 
 def preprocess_and_train_model(csv_file, employee_competencies_file):
     try:
@@ -37,6 +38,16 @@ def preprocess_and_train_model(csv_file, employee_competencies_file):
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     checkpoint = ModelCheckpoint('best_model.keras', monitor='val_accuracy', save_best_only=True, mode='max', verbose=1)
     model.fit(X_train_pad, y_train, epochs=5, validation_split=0.2, callbacks=[checkpoint])
+
+    tensorboard = TensorBoard(log_dir='./logs', histogram_freq=1, write_graph=True, write_images=False)
+    model = Sequential()
+    model.add(Embedding(input_dim=len(tokenizer.word_index) + 1, output_dim=50, input_length=X_train_pad.shape[1]))
+    model.add(LSTM(100))
+    model.add(Dense(len(set(y_train)), activation='softmax'))
+    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    checkpoint = ModelCheckpoint('best_model.keras', monitor='val_accuracy', save_best_only=True, mode='max', verbose=1)
+    model.fit(X_train_pad, y_train, epochs=5, validation_split=0.2,
+              callbacks=[checkpoint, tensorboard])  # Добавлен TensorBoard
 
     loss, accuracy = model.evaluate(X_test_pad, y_test)
     print(f'Accuracy: {accuracy}')

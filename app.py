@@ -7,13 +7,11 @@ import pandas as pd
 
 app = Flask(__name__)
 
-# Загружаем модель и другие объекты
 model, tokenizer, label_encoder, employee_competencies = None, None, None, None
 
 @app.before_request
 def before_request():
     global model, tokenizer, label_encoder, employee_competencies
-    # Проверяем, инициализированы ли объекты
     if model is None:
         model, tokenizer, label_encoder, employee_competencies = preprocess_and_train_model('train_data.csv', 'employee_competencies.csv')
 
