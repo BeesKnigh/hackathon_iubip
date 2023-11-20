@@ -1,11 +1,13 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from keras.models import load_model
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
+from flask_cors import CORS
 from customer_routing_app import preprocess_and_train_model, find_employee_category
 import pandas as pd
 
 app = Flask(__name__)
+CORS(app)
 
 model, tokenizer, label_encoder, employee_competencies = None, None, None, None
 
@@ -28,7 +30,7 @@ def result():
         prediction = model.predict(new_text_pad)
         predicted_label = label_encoder.classes_[prediction.argmax(axis=-1)[0]]
         employee = find_employee_category(employee_competencies, predicted_label)
-        return render_template('result.html', result=predicted_label, employee=employee)
+        return jsonify({"result": predicted_label, "employee": employee})
 
 if __name__ == '__main__':
     app.run(debug=True)
